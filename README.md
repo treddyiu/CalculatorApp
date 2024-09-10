@@ -1,5 +1,6 @@
 # Project Name
-Calculator App
+Calculator App:
+
 This is a calculator app, built in Android, that can carry out simple arithmetic operations. It is a user-friendly interface that helps provide users with accurate and real-time calculations. 
 ## Functionality
 The following **required** functionality is completed:
