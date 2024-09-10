@@ -1,5 +1,6 @@
+# Project Name
 Calculator App
-This is a calculator app, built in Andrroid, that can carry out simple arithmetic operations. It is a user-friendly interface that helps provide users with accurate and real-time calculations. 
+This is a calculator app, built in Android, that can carry out simple arithmetic operations. It is a user-friendly interface that helps provide users with accurate and real-time calculations. 
 ## Functionality
 The following **required** functionality is completed:
 * [ ] User sees keypad with numbers with 0-9 as well as a button for an integer sign (+/-), equal sign, decimal point, and arithmetic processes (+, -, %, *, /)
@@ -12,8 +13,10 @@ The following **extensions** are implemented:
 * User can see a default screen with a value of zero, rather than a blank screen upon entering app. 
 ## Video Walkthrough
 Here's a walkthrough of implemented user stories:
+
 <img src='walkthrough.gif' title='Video Walkthrough' width='50%' alt='Video
 Walkthrough' />
+
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 ## Notes
 Describe any challenges encountered while building the app.
