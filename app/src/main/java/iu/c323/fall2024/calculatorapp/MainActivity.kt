@@ -76,15 +76,12 @@ class MainActivity : AppCompatActivity() {
         binding.plusButton.setOnClickListener { view: View ->
             operationCounter++ // Increment the operation counter
 
-            if (checkEquals) {//need to store result if continuing calculation from previous calculation
-                inputNumbers = result.toString()
-            } else if (operationCounter == 1) {//first time calculation, preliminary
+          if ( (operationCounter == 1) and !checkEquals) {//first time calculation, preliminary
                 result = inputNumbers.toDouble()
             }
-
             // If the operationCounter is greater than 1, calculate the result
             else if (operationCounter > 1) {
-                result += inputNumbers.toDouble() // do addition
+                calculations()
                 binding.textViewDisplay.text = result.toString()
             }
 
@@ -104,14 +101,12 @@ class MainActivity : AppCompatActivity() {
             operationCounter++ // Increment the operation counter
 
 
-            if (checkEquals) {
-                inputNumbers = result.toString()
-            } else if (operationCounter == 1) {
+           if ((operationCounter == 1) and !checkEquals) {
                 result = inputNumbers.toDouble()
             }
             // If the operationCounter is greater than 1, calculate the result (cumulative calculations)
             else if (operationCounter > 1) {
-                result -= inputNumbers.toDouble() //need to subtract
+                calculations()
                 binding.textViewDisplay.text = result.toString()
             }
 
@@ -129,16 +124,13 @@ class MainActivity : AppCompatActivity() {
             operationCounter++ // Increment the operation counter
 
 
-            if (checkEquals) {
-                inputNumbers = result.toString()
-            } else if (operationCounter == 1) { //default, preliminary result
+            if ((operationCounter == 1) and !checkEquals) { //default, preliminary result
                 result = inputNumbers.toDouble()
-
             }
 
             //needed for cumulative calculation
             else if (operationCounter > 1) {
-                result *= inputNumbers.toDouble() //multiplication
+                calculations()
                 binding.textViewDisplay.text = result.toString()
             }
 
@@ -155,17 +147,13 @@ class MainActivity : AppCompatActivity() {
             //method is same as addition listener
             operationCounter++
 
-            if (checkEquals) {
-                inputNumbers = result.toString()
-            } else if (operationCounter == 1) {
+            if ((operationCounter == 1) and !checkEquals) {
                 result = inputNumbers.toDouble()
                 binding.textViewDisplay.text = result.toString()
             }
-
             else if (operationCounter > 1) {
-                result /= inputNumbers.toDouble()  //division
-                binding.textViewDisplay.text = result.toString()
-            }
+                calculations()
+                binding.textViewDisplay.text = result.toString()}
 
             inputNumbers = "0"
             checkSubtract = false
@@ -178,13 +166,13 @@ class MainActivity : AppCompatActivity() {
 
         //percent symbol listener, will return value / 100
         binding.percentButton.setOnClickListener{
-            if(checkEquals){ //if this is secondary calculation after equal is already pressed, need to divide result by 100
-                binding.textViewDisplay.text = (result/100).toString()
-                result /= 100
-            } else{ //otherwise, use input and update display and value accordingly
-                inputNumbers = (inputNumbers.toDouble()/100).toString()
-                binding.textViewDisplay.text = inputNumbers
-            }
+                if(inputNumbers.equals("0")) {
+                    binding.textViewDisplay.text = (result / 100).toString()
+                    result /= 100
+                }else{
+                    binding.textViewDisplay.text = (inputNumbers.toDouble()/ 100).toString()
+                    inputNumbers = (inputNumbers.toDouble()/100).toString()
+                }
 
             checkSubtract = false
             checkAdd = false
@@ -211,32 +199,10 @@ class MainActivity : AppCompatActivity() {
 
         //equal button listener
         binding.equalsButton.setOnClickListener { view: View ->
-            //depending on the relevant bool being true, appropriate condition will be calculated
-            if (checkAdd) { //addition
-                result += inputNumbers.toDouble()
-                binding.textViewDisplay.text = result.toString()
-            } else if (checkSubtract) {//subtraction
-                result -= inputNumbers.toDouble()
-                binding.textViewDisplay.text = result.toString()
-            } else if (checkMultiply) {//multiplication
-                result *= inputNumbers.toDouble()
-                binding.textViewDisplay.text = result.toString()
-            } else if (checkDiv) {//division
-                result /= inputNumbers.toDouble()
-                binding.textViewDisplay.text = result.toString()
-            }
-
-
-            //resetting all values to default
-            checkAdd = false
-            checkMultiply = false
-            checkDiv = false
+           calculations()
             checkEquals = true //will be set to true since equal button is clicked
-            checkPercent = false
-            operationCounter = 0
-
-
-            //need to erase until here
+           operationCounter = 0
+            inputNumbers = "0"
         }
 
 
@@ -248,10 +214,14 @@ class MainActivity : AppCompatActivity() {
 
         //makes positive numbers neg and vice versa
         binding.signButton.setOnClickListener {
+            operationCounter++
             //when default with no value, start with - sign alone
-            if(inputNumbers.equals("0")){
+            if(inputNumbers.equals("0") and !checkEquals){
                 binding.textViewDisplay.text = "-"
                 inputNumbers = "-"
+            }else if(checkEquals and inputNumbers.equals("0")){
+                result = -result;
+                binding.textViewDisplay.text = result.toString()
             }
             //if number is positive, make neg
             else if (inputNumbers.toDouble() > 0) {
@@ -296,6 +266,30 @@ class MainActivity : AppCompatActivity() {
             inputNumbers += userAnswer
             binding.textViewDisplay.text = inputNumbers
         }
+    }
+
+    private fun calculations(){
+        if (checkAdd) { //addition
+            result += inputNumbers.toDouble()
+            binding.textViewDisplay.text = result.toString()
+        } else if (checkSubtract) {//subtraction
+            result -= inputNumbers.toDouble()
+            binding.textViewDisplay.text = result.toString()
+        } else if (checkMultiply) {//multiplication
+            result *= inputNumbers.toDouble()
+            binding.textViewDisplay.text = result.toString()
+        } else if (checkDiv) {//division
+            result /= inputNumbers.toDouble()
+            binding.textViewDisplay.text = result.toString()
+        }
+
+
+        //resetting all values to default
+        checkAdd = false
+        checkMultiply = false
+        checkDiv = false
+        checkPercent = false
+
     }
 
 
