@@ -10,6 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import iu.c323.fall2024.calculatorapp.databinding.ActivityMainBinding
+import kotlin.math.cos
+import kotlin.math.ln
+import kotlin.math.log
+import kotlin.math.sin
+import kotlin.math.tan
+
 //edit
 
 class MainActivity : AppCompatActivity() {
@@ -163,6 +169,112 @@ class MainActivity : AppCompatActivity() {
             checkDiv = true //relevant bool
             checkEquals = false
         }
+        //////////buttons for project2
+        //sin button
+
+        binding.sinButton?.setOnClickListener {
+            //method is same as addition listener
+            if(checkEquals){
+                result = sin(Math.toRadians(result))
+                binding.textViewDisplay.text = result.toString()
+            } else if (operationCounter >= 1){
+                inputNumbers = sin(Math.toRadians(inputNumbers.toDouble())).toString()
+                binding.textViewDisplay.text = inputNumbers.toString()
+            }
+            else {
+                result = sin(Math.toRadians(inputNumbers.toDouble()))
+                binding.textViewDisplay.text = result.toString()
+            }
+            operationCounter++
+        }
+
+        //cos button
+        binding.cosButton?.setOnClickListener {
+            //method is same as addition listener
+            if(checkEquals){
+                result = cos(Math.toRadians(result))
+                binding.textViewDisplay.text = result.toString()
+            } else if (operationCounter >= 1){
+                inputNumbers = cos(Math.toRadians(inputNumbers.toDouble())).toString()
+                binding.textViewDisplay.text = inputNumbers.toString()
+            }
+            else {
+                result = cos(Math.toRadians(inputNumbers.toDouble()))
+                binding.textViewDisplay.text = result.toString()
+            }
+            operationCounter++
+        }
+
+        //tam button
+        binding.tanButton?.setOnClickListener {
+            //method is same as addition listener
+            if(checkEquals){
+                result = tan(Math.toRadians(result))
+                binding.textViewDisplay.text = result.toString()
+            } else if (operationCounter >= 1){
+                inputNumbers = tan(Math.toRadians(inputNumbers.toDouble())).toString()
+                binding.textViewDisplay.text = inputNumbers.toString()
+            }
+            else {
+                result = tan(Math.toRadians(inputNumbers.toDouble()))
+                binding.textViewDisplay.text = result.toString()
+            }
+            operationCounter++
+        }
+
+        //natural log
+        binding.lnButton?.setOnClickListener {
+            //method is same as addition listener
+            if(checkEquals){
+                result = ln(result)
+                binding.textViewDisplay.text = result.toString()
+            } else if (operationCounter >= 1){
+                inputNumbers = ln(inputNumbers.toDouble()).toString()
+                binding.textViewDisplay.text = inputNumbers.toString()
+            }
+            else {
+                result = ln(inputNumbers.toDouble())
+                binding.textViewDisplay.text = result.toString()
+            }
+            operationCounter++
+        }
+
+        //log10 button
+        binding.lnButton?.setOnClickListener {
+            //method is same as addition listener
+            if(checkEquals){
+                result = ln(result)
+                binding.textViewDisplay.text = result.toString()
+            } else if (operationCounter >= 1){
+                inputNumbers = ln(inputNumbers.toDouble()).toString()
+                binding.textViewDisplay.text = inputNumbers.toString()
+            }
+            else {
+                result = ln(inputNumbers.toDouble())
+                binding.textViewDisplay.text = result.toString()
+            }
+            operationCounter++
+        }
+
+        //log10 button
+        binding.logButton?.setOnClickListener {
+            //method is same as addition listener
+            if(checkEquals){
+                result = log(result, 10.0)
+                binding.textViewDisplay.text = result.toString()
+            } else if (operationCounter >= 1){
+                inputNumbers = log(inputNumbers.toDouble(), 10.0).toString()
+                binding.textViewDisplay.text = inputNumbers.toString()
+            }
+            else {
+                result = log(inputNumbers.toDouble(), 10.0)
+                binding.textViewDisplay.text = result.toString()
+            }
+            operationCounter++
+        }
+
+
+
 
         //percent symbol listener, will return value / 100
         binding.percentButton.setOnClickListener{
@@ -284,11 +396,13 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+
         //resetting all values to default
         checkAdd = false
         checkMultiply = false
         checkDiv = false
         checkPercent = false
+
 
     }
 
