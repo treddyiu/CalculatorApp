@@ -1,5 +1,6 @@
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+//make keys to pass in for set functions
 const val KEY_INPUT_NUMBERS = "inputNumbers"
 const val KEY_RESULT = "result"
 const val KEY_CHECK_ADD = "checkAdd"
@@ -10,15 +11,12 @@ const val KEY_CHECK_EQUALS = "checkEquals"
 const val KEY_CHECK_PERCENT = "checkPercent"
 const val KEY_OPERATION_COUNTER = "operationCounter"
 
+//using savedStateHandle data to save and use data through process data
 class CalculatorViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
-
-    // Keys for saving data in SavedStateHandle
-
-
-
 
 
     // Getters and setters through SavedStateHandle
+    //made for each instance variable and set to default value in getter function
     var inputNumbers: String
         get() = savedStateHandle.get(KEY_INPUT_NUMBERS) ?: "0"
         set(value) = savedStateHandle.set(KEY_INPUT_NUMBERS, value)

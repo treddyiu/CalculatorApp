@@ -1,9 +1,9 @@
 package iu.c323.fall2024.calculatorapp
 //import statements
-
 import CalculatorViewModel
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -19,73 +19,85 @@ import kotlin.math.log
 import kotlin.math.sin
 import kotlin.math.tan
 
+//used for logging reference purposes
 private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
     //instance variables
     private lateinit var binding: ActivityMainBinding
 
-    private val calcViewModel: CalculatorViewModel by viewModels()
+    private val calcViewModel: CalculatorViewModel by viewModels() //making reference to ViewModel that will help maintain orientation
 
-    
+
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         //useful for accesing UI
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater) //converts XML file to Kotlin Objects
         setContentView(binding.root)
-        val displayText = calcViewModel.inputNumbers
 
-        binding.textViewDisplay.text = calcViewModel.inputNumbers
+
+        binding.textViewDisplay.text = calcViewModel.inputNumbers //replace all variables with variable references from ViewModel
+        //sets Display to default input value
 
 
 
         //button listeners to pass in arbitrary value to be used in calculation
         binding.zeroButton.setOnClickListener { view: View ->
             buttonFunc("0")
-
+            Log.d(TAG, "Zero Button is clicked")//logging
         }
         binding.oneButton.setOnClickListener { view: View ->
             buttonFunc("1")
+            Log.d(TAG, "One Button is clicked")//logging
         }
         binding.twoButton.setOnClickListener { view: View ->
             buttonFunc("2")
+            Log.d(TAG, "Two Button is clicked")//logging
         }
         binding.threeButton.setOnClickListener { view: View ->
             buttonFunc("3")
+            Log.d(TAG, "Three Button is clicked")//logging
         }
         binding.fourButton.setOnClickListener { view: View ->
             buttonFunc("4")
+            Log.d(TAG, "Four Button is clicked")//logging
         }
         binding.fiveButton.setOnClickListener { view: View ->
             buttonFunc("5")
+            Log.d(TAG, "Five Button is clicked")///logging
         }
         binding.sixButton.setOnClickListener { view: View ->
             buttonFunc("6")
+            Log.d(TAG, "Six Button is clicked")//logging
         }
         binding.sevenButton.setOnClickListener { view: View ->
             buttonFunc("7")
+            Log.d(TAG, "Seven Button is clicked")//logging
         }
         binding.eightButton.setOnClickListener { view: View ->
             buttonFunc("8")
+            Log.d(TAG, "Eight Button is clicked")//logging
         }
         binding.nineButton.setOnClickListener { view: View ->
             buttonFunc("9")
+            Log.d(TAG, "Nine Button is clicked")//logging
         }
 
         //method for when addition button is pressed
         binding.plusButton.setOnClickListener { view: View ->
+            Log.d(TAG, "Plus Button is clicked")
             calcViewModel.operationCounter++ // Increment the operation counter
 
-          if ( (calcViewModel.operationCounter == 1) and !calcViewModel.checkEquals) {//first time calculation, preliminary
+          if ( (calcViewModel.operationCounter == 1) and !calcViewModel.checkEquals) {//first time calculation, preliminary and before equal button is pressed
                 calcViewModel.result = calcViewModel.inputNumbers.toDouble()
             }
-            // If the calcViewModel.operationCounter is greater than 1, calculate the calcViewModel.result
+            // If the calcViewModel.operationCounter is greater than 1, calculate the result upon next Button click
             else if (calcViewModel.operationCounter > 1) {
-                calculations()
-                binding.textViewDisplay.text = calcViewModel.result.toString()
+                calculations() //call function that will calculate and provide result while accounting for previous operations
+                binding.textViewDisplay.text = calcViewModel.result.toString() //display result
             }
 
             //reset variables to default
@@ -101,18 +113,20 @@ class MainActivity : AppCompatActivity() {
         //subtraction listener
         binding.minusButton.setOnClickListener {
             //method is similar to addition process
+            Log.d(TAG, "Minus Button is clicked")
             calcViewModel.operationCounter++ // Increment the operation counter
 
 
            if ((calcViewModel.operationCounter == 1) and !calcViewModel.checkEquals) {
                 calcViewModel.result = calcViewModel.inputNumbers.toDouble()
             }
-            // If the calcViewModel.operationCounter is greater than 1, calculate the calcViewModel.result (cumulative calculations)
+            // If the calcViewModel.operationCounter is greater than 1, calculate the resuly
             else if (calcViewModel.operationCounter > 1) {
-                calculations()
+                calculations() //call method that will calculate + store result
                 binding.textViewDisplay.text = calcViewModel.result.toString()
             }
 
+            //reset
             calcViewModel.inputNumbers = "0"
             calcViewModel.checkSubtract = true //need to relevant bool as true
             calcViewModel.checkAdd = false
@@ -124,6 +138,7 @@ class MainActivity : AppCompatActivity() {
         //multiplication listener
         binding.xButton.setOnClickListener {
             //method is similar to addition
+            Log.d(TAG, "Multiplication Button is clicked")
             calcViewModel.operationCounter++ // Increment the operation counter
 
 
@@ -137,6 +152,7 @@ class MainActivity : AppCompatActivity() {
                 binding.textViewDisplay.text = calcViewModel.result.toString()
             }
 
+            //reset
             calcViewModel.inputNumbers = "0"
             calcViewModel.checkMultiply = true //relevant bool
             calcViewModel.checkSubtract = false
@@ -145,16 +161,18 @@ class MainActivity : AppCompatActivity() {
             calcViewModel.checkDiv = false
             calcViewModel.checkEquals = false
         }
+
         //division listener
         binding.divButton.setOnClickListener {
+            Log.d(TAG, "Division Button is clicked")
             //method is same as addition listener
             calcViewModel.operationCounter++
 
-            if ((calcViewModel.operationCounter == 1) and !calcViewModel.checkEquals) {
+            if ((calcViewModel.operationCounter == 1) and !calcViewModel.checkEquals) {//preliminary calculation
                 calcViewModel.result = calcViewModel.inputNumbers.toDouble()
                 binding.textViewDisplay.text = calcViewModel.result.toString()
             }
-            else if (calcViewModel.operationCounter > 1) {
+            else if (calcViewModel.operationCounter > 1) {//more than 1 operation being done
                 calculations()
                 binding.textViewDisplay.text = calcViewModel.result.toString()}
 
@@ -166,88 +184,93 @@ class MainActivity : AppCompatActivity() {
             calcViewModel.checkDiv = true //relevant bool
             calcViewModel.checkEquals = false
         }
-        //////////buttons for project2
-        //sin button
 
+        //////////buttons for project2/////////
+        //sin button, returns sin
         binding.sinButton?.setOnClickListener {
-            //method is same as addition listener
-            if(calcViewModel.checkEquals){
-                calcViewModel.result = sin(Math.toRadians(calcViewModel.result))
-                binding.textViewDisplay.text = calcViewModel.result.toString()
-            } else if (calcViewModel.operationCounter >= 1){
+            //calculate results directly within conditionals to show result instantly
+            Log.d(TAG, "Sin Button is clicked") //logging
+            if(calcViewModel.checkEquals){//if equal button is pressed
+                calcViewModel.result = sin(Math.toRadians(calcViewModel.result)) //use prev result to get new
+                binding.textViewDisplay.text = calcViewModel.result.toString() //display
+            } else if (calcViewModel.operationCounter >= 1){ //if there has been more than 1 operation, use latest input and give as new input
                 calcViewModel.inputNumbers = sin(Math.toRadians(calcViewModel.inputNumbers.toDouble())).toString()
-                binding.textViewDisplay.text = calcViewModel.inputNumbers.toString()
+                binding.textViewDisplay.text = calcViewModel.inputNumbers.toString() //display
             }
-            else {
-                calcViewModel.result = sin(Math.toRadians(calcViewModel.inputNumbers.toDouble()))
-                binding.textViewDisplay.text = calcViewModel.result.toString()
+            else {//preliminary calculation and before any other operation has been conducted
+                calcViewModel.result = sin(Math.toRadians(calcViewModel.inputNumbers.toDouble())) //use given input to calculate result
+                binding.textViewDisplay.text = calcViewModel.result.toString() //display
             }
-            calcViewModel.operationCounter++
+            calcViewModel.operationCounter++ //increment operationCounter to keep track of if button has been clicked
         }
 
-        //cos button
+        //cos button, returns cosine
         binding.cosButton?.setOnClickListener {
-            //method is same as addition listener
-            if(calcViewModel.checkEquals){
+            Log.d(TAG, "Cos Button is clicked") //logging
+            //algorithm is same as sin button
+            if(calcViewModel.checkEquals){ //equals condition
                 calcViewModel.result = cos(Math.toRadians(calcViewModel.result))
                 binding.textViewDisplay.text = calcViewModel.result.toString()
-            } else if (calcViewModel.operationCounter >= 1){
+            } else if (calcViewModel.operationCounter >= 1){ //sequential operations
                 calcViewModel.inputNumbers = cos(Math.toRadians(calcViewModel.inputNumbers.toDouble())).toString()
                 binding.textViewDisplay.text = calcViewModel.inputNumbers.toString()
             }
-            else {
+            else {//standard calculation
                 calcViewModel.result = cos(Math.toRadians(calcViewModel.inputNumbers.toDouble()))
                 binding.textViewDisplay.text = calcViewModel.result.toString()
             }
             calcViewModel.operationCounter++
         }
 
-        //tam button
+        //tan button, returns tangent value
         binding.tanButton?.setOnClickListener {
-            //method is same as addition listener
-            if(calcViewModel.checkEquals){
+            //same algorithm as sin button
+            Log.d(TAG, "Tan Button is clicked")//logging
+            if(calcViewModel.checkEquals){//equals condition
                 calcViewModel.result = tan(Math.toRadians(calcViewModel.result))
                 binding.textViewDisplay.text = calcViewModel.result.toString()
-            } else if (calcViewModel.operationCounter >= 1){
+            } else if (calcViewModel.operationCounter >= 1){//sequential operations
                 calcViewModel.inputNumbers = tan(Math.toRadians(calcViewModel.inputNumbers.toDouble())).toString()
                 binding.textViewDisplay.text = calcViewModel.inputNumbers.toString()
             }
-            else {
+            else {//standard operation
                 calcViewModel.result = tan(Math.toRadians(calcViewModel.inputNumbers.toDouble()))
                 binding.textViewDisplay.text = calcViewModel.result.toString()
             }
-            calcViewModel.operationCounter++
+            calcViewModel.operationCounter++ //increment
         }
 
-        //natural log
+        //natural log value
         binding.lnButton?.setOnClickListener {
-            //method is same as addition listener
-            if(calcViewModel.checkEquals){
+            //algorithm is same as sin button
+            Log.d(TAG, "Natural log Button is clicked") //logging
+            if(calcViewModel.checkEquals){//equals condition
                 calcViewModel.result = ln(calcViewModel.result)
                 binding.textViewDisplay.text = calcViewModel.result.toString()
-            } else if (calcViewModel.operationCounter >= 1){
+            } else if (calcViewModel.operationCounter >= 1){//sequential operations
                 calcViewModel.inputNumbers = ln(calcViewModel.inputNumbers.toDouble()).toString()
                 binding.textViewDisplay.text = calcViewModel.inputNumbers.toString()
             }
-            else {
+            else {//standard operation
                 calcViewModel.result = ln(calcViewModel.inputNumbers.toDouble())
                 binding.textViewDisplay.text = calcViewModel.result.toString()
             }
-            calcViewModel.operationCounter++
+            calcViewModel.operationCounter++ //increment
         }
 
 
-        //log10 button
+        //log10 button, will return log value with base 10
         binding.logButton?.setOnClickListener {
-            //method is same as addition listener
-            if(calcViewModel.checkEquals){
+            //method is same as sin button
+            Log.d(TAG, "Log Button is clicked")
+            if(calcViewModel.checkEquals){//equals condition
                 calcViewModel.result = log(calcViewModel.result, 10.0)
                 binding.textViewDisplay.text = calcViewModel.result.toString()
-            } else if (calcViewModel.operationCounter >= 1){
+            } else if (calcViewModel.operationCounter >= 1){//sequential operations
                 calcViewModel.inputNumbers = log(calcViewModel.inputNumbers.toDouble(), 10.0).toString()
                 binding.textViewDisplay.text = calcViewModel.inputNumbers.toString()
             }
-            else {
+            else {//standard calculation
                 calcViewModel.result = log(calcViewModel.inputNumbers.toDouble(), 10.0)
                 binding.textViewDisplay.text = calcViewModel.result.toString()
             }
@@ -257,9 +280,10 @@ class MainActivity : AppCompatActivity() {
 
         //percent symbol listener, will return value / 100
         binding.percentButton.setOnClickListener{
-            if (calcViewModel.checkEquals) { // Handle percentage based on the result from previous operation
-                calcViewModel.result /= 100
-                binding.textViewDisplay.text = calcViewModel.result.toString()
+            Log.d(TAG, "Percent Button is clicked")
+            if (calcViewModel.checkEquals) { // Handle percentage based on the result from previous operation if equal button is clicked
+                calcViewModel.result /= 100 //need result to be shown as soon as button is clocked
+                binding.textViewDisplay.text = calcViewModel.result.toString() //display
             } else if (calcViewModel.inputNumbers != "0") {
                 calcViewModel.inputNumbers = (calcViewModel.inputNumbers.toDouble() / 100).toString()
                 binding.textViewDisplay.text = calcViewModel.inputNumbers
@@ -275,6 +299,7 @@ class MainActivity : AppCompatActivity() {
         //clear button used as reset
         binding.cButton.setOnClickListener {
             //setting ALL values back to default
+            Log.d(TAG, "Clear Button is clicked") //logging
             binding.textViewDisplay.text = "0"
             calcViewModel.inputNumbers = "0"
             calcViewModel.checkAdd = false
@@ -289,8 +314,10 @@ class MainActivity : AppCompatActivity() {
 
         //equal button listener
         binding.equalsButton.setOnClickListener { view: View ->
-           calculations()
+            Log.d(TAG, "Equals Button is clicked")
+           calculations() //when equals is pressed, necessary bool will finish the calculation
             calcViewModel.checkEquals = true //will be set to true since equal button is clicked
+            //reset operation counter and inputs since equals gives final result
            calcViewModel.operationCounter = 0
             calcViewModel.inputNumbers = "0"
         }
@@ -298,6 +325,7 @@ class MainActivity : AppCompatActivity() {
 
         //adding decimal to display and actual value
         binding.decimalButton.setOnClickListener {
+            Log.d(TAG, "Decimal Button is clicked")
             binding.textViewDisplay.text = calcViewModel.inputNumbers + "."
             calcViewModel.inputNumbers += "."
         }
@@ -305,10 +333,11 @@ class MainActivity : AppCompatActivity() {
         //makes positive numbers neg and vice versa
         binding.signButton.setOnClickListener {
             //when default with no value, start with - sign alone
-            if(calcViewModel.inputNumbers.equals("0") and !calcViewModel.checkEquals){
+            Log.d(TAG, "Pos/Neg Button is clicked")
+            if(calcViewModel.inputNumbers.equals("0") and !calcViewModel.checkEquals){//show negative sign if neg button is clicked before entering number
                 binding.textViewDisplay.text = "-"
                 calcViewModel.inputNumbers = "-"
-            }else if(calcViewModel.checkEquals and calcViewModel.inputNumbers.equals("0")){
+            }else if(calcViewModel.checkEquals and calcViewModel.inputNumbers.equals("0")){//if equal button has been pressed and reset is needed, use result in order to build off of prev calculayion
                 calcViewModel.result = -calcViewModel.result;
                 binding.textViewDisplay.text = calcViewModel.result.toString()
             }
@@ -355,7 +384,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun calculations(){
+    private fun calculations(){//function that checks for specific booleans and when true, calculates and displays result accordingly
         if (calcViewModel.checkAdd) { //addition
             calcViewModel.result += calcViewModel.inputNumbers.toDouble()
             binding.textViewDisplay.text = calcViewModel.result.toString()
@@ -382,12 +411,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    override fun onResume() {
+    override fun onResume() {//when orientation is turned, display still needs to be updated upon resuming (even tho Active objects are not destroyed)
         super.onResume()
-        if (calcViewModel.checkEquals) {
+        if (calcViewModel.checkEquals) {//if equal button has been pressed, last display should be the final result when orientation is changed
             binding.textViewDisplay.text = (calcViewModel.result).toString()
         }
-        else{
+        else{//otherwise, use input for the display
             binding.textViewDisplay.text = calcViewModel.inputNumbers
         }
 
