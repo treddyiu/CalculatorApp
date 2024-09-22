@@ -1,5 +1,11 @@
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import kotlin.math.cos
+import kotlin.math.ln
+import kotlin.math.log
+import kotlin.math.sin
+import kotlin.math.tan
+
 //make keys to pass in for set functions
 const val KEY_INPUT_NUMBERS = "inputNumbers"
 const val KEY_RESULT = "result"
@@ -13,7 +19,6 @@ const val KEY_OPERATION_COUNTER = "operationCounter"
 
 //using savedStateHandle data to save and use data through process data
 class CalculatorViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
-
 
     // Getters and setters through SavedStateHandle
     //made for each instance variable and set to default value in getter function
@@ -53,6 +58,50 @@ class CalculatorViewModel(private val savedStateHandle: SavedStateHandle) : View
         get() = savedStateHandle.get(KEY_OPERATION_COUNTER) ?: 0
         set(value) = savedStateHandle.set(KEY_OPERATION_COUNTER, value)
 
+
+
+    fun calculations(){//function that checks for specific booleans and when true, calculates and displays result accordingly
+        if (checkAdd) { //addition
+            result += inputNumbers.toDouble()
+        } else if (checkSubtract) {//subtraction
+            result -= inputNumbers.toDouble()
+        } else if (checkMultiply) {//multiplication
+            result *= inputNumbers.toDouble()
+        } else if (checkDiv) {//division
+            result /= inputNumbers.toDouble()
+        }
+
+        //resetting all values to default
+        checkAdd = false
+        checkMultiply = false
+        checkDiv = false
+        checkPercent = false
+
+    }
+
+    fun cosFunc(double: Double): Double {
+        return cos(Math.toRadians(double))
+    }
+
+    fun sinFunc(double: Double): Double{
+        return sin(Math.toRadians(double))
+    }
+
+    fun tanFunc(double: Double):Double{
+        return tan(Math.toRadians(double))
+    }
+
+    fun logFunc(double: Double):Double{
+        return log(double, 10.0)
+    }
+
+    fun lnFunc(double: Double):Double{
+        return ln(double)
+    }
+
+    fun percentFunc(double: Double):Double{
+        return double/100
+    }
 
 
 }

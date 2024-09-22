@@ -96,7 +96,8 @@ class MainActivity : AppCompatActivity() {
             }
             // If the calcViewModel.operationCounter is greater than 1, calculate the result upon next Button click
             else if (calcViewModel.operationCounter > 1) {
-                calculations() //call function that will calculate and provide result while accounting for previous operations
+                calcViewModel.calculations() //call function that will calculate and provide result while accounting for previous operations
+                binding.textViewDisplay.text = calcViewModel.result.toString()
                 binding.textViewDisplay.text = calcViewModel.result.toString() //display result
             }
 
@@ -120,9 +121,10 @@ class MainActivity : AppCompatActivity() {
            if ((calcViewModel.operationCounter == 1) and !calcViewModel.checkEquals) {
                 calcViewModel.result = calcViewModel.inputNumbers.toDouble()
             }
-            // If the calcViewModel.operationCounter is greater than 1, calculate the resuly
+            // If the calcViewModel.operationCounter is greater than 1, calculate the result
             else if (calcViewModel.operationCounter > 1) {
-                calculations() //call method that will calculate + store result
+                calcViewModel.calculations() //call method that will calculate + store result
+               binding.textViewDisplay.text = calcViewModel.result.toString()
                 binding.textViewDisplay.text = calcViewModel.result.toString()
             }
 
@@ -148,7 +150,8 @@ class MainActivity : AppCompatActivity() {
 
             //needed for cumulative calculation
             else if (calcViewModel.operationCounter > 1) {
-                calculations()
+                calcViewModel.calculations()
+                binding.textViewDisplay.text = calcViewModel.result.toString()
                 binding.textViewDisplay.text = calcViewModel.result.toString()
             }
 
@@ -173,7 +176,8 @@ class MainActivity : AppCompatActivity() {
                 binding.textViewDisplay.text = calcViewModel.result.toString()
             }
             else if (calcViewModel.operationCounter > 1) {//more than 1 operation being done
-                calculations()
+                calcViewModel.calculations()
+                binding.textViewDisplay.text = calcViewModel.result.toString()
                 binding.textViewDisplay.text = calcViewModel.result.toString()}
 
             calcViewModel.inputNumbers = "0"
@@ -191,14 +195,14 @@ class MainActivity : AppCompatActivity() {
             //calculate results directly within conditionals to show result instantly
             Log.d(TAG, "Sin Button is clicked") //logging
             if(calcViewModel.checkEquals){//if equal button is pressed
-                calcViewModel.result = sin(Math.toRadians(calcViewModel.result)) //use prev result to get new
+                calcViewModel.result = calcViewModel.sinFunc(calcViewModel.result) //use prev result to get new
                 binding.textViewDisplay.text = calcViewModel.result.toString() //display
             } else if (calcViewModel.operationCounter >= 1){ //if there has been more than 1 operation, use latest input and give as new input
-                calcViewModel.inputNumbers = sin(Math.toRadians(calcViewModel.inputNumbers.toDouble())).toString()
+                calcViewModel.inputNumbers = calcViewModel.sinFunc(calcViewModel.inputNumbers.toDouble()).toString()
                 binding.textViewDisplay.text = calcViewModel.inputNumbers.toString() //display
             }
             else {//preliminary calculation and before any other operation has been conducted
-                calcViewModel.result = sin(Math.toRadians(calcViewModel.inputNumbers.toDouble())) //use given input to calculate result
+                calcViewModel.result = calcViewModel.sinFunc(calcViewModel.inputNumbers.toDouble()) //use given input to calculate result
                 binding.textViewDisplay.text = calcViewModel.result.toString() //display
             }
             calcViewModel.operationCounter++ //increment operationCounter to keep track of if button has been clicked
@@ -209,14 +213,14 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG, "Cos Button is clicked") //logging
             //algorithm is same as sin button
             if(calcViewModel.checkEquals){ //equals condition
-                calcViewModel.result = cos(Math.toRadians(calcViewModel.result))
+                calcViewModel.result = calcViewModel.cosFunc(calcViewModel.result)
                 binding.textViewDisplay.text = calcViewModel.result.toString()
             } else if (calcViewModel.operationCounter >= 1){ //sequential operations
-                calcViewModel.inputNumbers = cos(Math.toRadians(calcViewModel.inputNumbers.toDouble())).toString()
+                calcViewModel.inputNumbers = calcViewModel.cosFunc(calcViewModel.inputNumbers.toDouble()).toString()
                 binding.textViewDisplay.text = calcViewModel.inputNumbers.toString()
             }
             else {//standard calculation
-                calcViewModel.result = cos(Math.toRadians(calcViewModel.inputNumbers.toDouble()))
+                calcViewModel.result = calcViewModel.cosFunc(calcViewModel.inputNumbers.toDouble())
                 binding.textViewDisplay.text = calcViewModel.result.toString()
             }
             calcViewModel.operationCounter++
@@ -227,14 +231,14 @@ class MainActivity : AppCompatActivity() {
             //same algorithm as sin button
             Log.d(TAG, "Tan Button is clicked")//logging
             if(calcViewModel.checkEquals){//equals condition
-                calcViewModel.result = tan(Math.toRadians(calcViewModel.result))
+                calcViewModel.result = calcViewModel.tanFunc(calcViewModel.result)
                 binding.textViewDisplay.text = calcViewModel.result.toString()
             } else if (calcViewModel.operationCounter >= 1){//sequential operations
-                calcViewModel.inputNumbers = tan(Math.toRadians(calcViewModel.inputNumbers.toDouble())).toString()
+                calcViewModel.inputNumbers = calcViewModel.tanFunc(calcViewModel.inputNumbers.toDouble()).toString()
                 binding.textViewDisplay.text = calcViewModel.inputNumbers.toString()
             }
             else {//standard operation
-                calcViewModel.result = tan(Math.toRadians(calcViewModel.inputNumbers.toDouble()))
+                calcViewModel.result = calcViewModel.tanFunc(calcViewModel.inputNumbers.toDouble())
                 binding.textViewDisplay.text = calcViewModel.result.toString()
             }
             calcViewModel.operationCounter++ //increment
@@ -245,14 +249,14 @@ class MainActivity : AppCompatActivity() {
             //algorithm is same as sin button
             Log.d(TAG, "Natural log Button is clicked") //logging
             if(calcViewModel.checkEquals){//equals condition
-                calcViewModel.result = ln(calcViewModel.result)
+                calcViewModel.result = calcViewModel.lnFunc(calcViewModel.result)
                 binding.textViewDisplay.text = calcViewModel.result.toString()
             } else if (calcViewModel.operationCounter >= 1){//sequential operations
-                calcViewModel.inputNumbers = ln(calcViewModel.inputNumbers.toDouble()).toString()
+                calcViewModel.inputNumbers = calcViewModel.lnFunc(calcViewModel.inputNumbers.toDouble()).toString()
                 binding.textViewDisplay.text = calcViewModel.inputNumbers.toString()
             }
             else {//standard operation
-                calcViewModel.result = ln(calcViewModel.inputNumbers.toDouble())
+                calcViewModel.result = calcViewModel.lnFunc(calcViewModel.inputNumbers.toDouble())
                 binding.textViewDisplay.text = calcViewModel.result.toString()
             }
             calcViewModel.operationCounter++ //increment
@@ -264,14 +268,14 @@ class MainActivity : AppCompatActivity() {
             //method is same as sin button
             Log.d(TAG, "Log Button is clicked")
             if(calcViewModel.checkEquals){//equals condition
-                calcViewModel.result = log(calcViewModel.result, 10.0)
+                calcViewModel.result = calcViewModel.logFunc(calcViewModel.result)
                 binding.textViewDisplay.text = calcViewModel.result.toString()
             } else if (calcViewModel.operationCounter >= 1){//sequential operations
-                calcViewModel.inputNumbers = log(calcViewModel.inputNumbers.toDouble(), 10.0).toString()
+                calcViewModel.inputNumbers = calcViewModel.logFunc(calcViewModel.inputNumbers.toDouble()).toString()
                 binding.textViewDisplay.text = calcViewModel.inputNumbers.toString()
             }
             else {//standard calculation
-                calcViewModel.result = log(calcViewModel.inputNumbers.toDouble(), 10.0)
+                calcViewModel.result = calcViewModel.logFunc(calcViewModel.inputNumbers.toDouble())
                 binding.textViewDisplay.text = calcViewModel.result.toString()
             }
             calcViewModel.operationCounter++
@@ -282,10 +286,10 @@ class MainActivity : AppCompatActivity() {
         binding.percentButton.setOnClickListener{
             Log.d(TAG, "Percent Button is clicked")
             if (calcViewModel.checkEquals) { // Handle percentage based on the result from previous operation if equal button is clicked
-                calcViewModel.result /= 100 //need result to be shown as soon as button is clocked
+                calcViewModel.result = calcViewModel.percentFunc(calcViewModel.result) //need result to be shown as soon as button is clocked
                 binding.textViewDisplay.text = calcViewModel.result.toString() //display
             } else if (calcViewModel.inputNumbers != "0") {
-                calcViewModel.inputNumbers = (calcViewModel.inputNumbers.toDouble() / 100).toString()
+                calcViewModel.inputNumbers = calcViewModel.percentFunc(calcViewModel.inputNumbers.toDouble()).toString()
                 binding.textViewDisplay.text = calcViewModel.inputNumbers
             }
 
@@ -315,7 +319,8 @@ class MainActivity : AppCompatActivity() {
         //equal button listener
         binding.equalsButton.setOnClickListener { view: View ->
             Log.d(TAG, "Equals Button is clicked")
-           calculations() //when equals is pressed, necessary bool will finish the calculation
+           calcViewModel.calculations() //when equals is pressed, necessary bool will finish the calculation
+            binding.textViewDisplay.text = calcViewModel.result.toString()
             calcViewModel.checkEquals = true //will be set to true since equal button is clicked
             //reset operation counter and inputs since equals gives final result
            calcViewModel.operationCounter = 0
@@ -384,31 +389,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun calculations(){//function that checks for specific booleans and when true, calculates and displays result accordingly
-        if (calcViewModel.checkAdd) { //addition
-            calcViewModel.result += calcViewModel.inputNumbers.toDouble()
-            binding.textViewDisplay.text = calcViewModel.result.toString()
-        } else if (calcViewModel.checkSubtract) {//subtraction
-            calcViewModel.result -= calcViewModel.inputNumbers.toDouble()
-            binding.textViewDisplay.text = calcViewModel.result.toString()
-        } else if (calcViewModel.checkMultiply) {//multiplication
-            calcViewModel.result *= calcViewModel.inputNumbers.toDouble()
-            binding.textViewDisplay.text = calcViewModel.result.toString()
-        } else if (calcViewModel.checkDiv) {//division
-            calcViewModel.result /= calcViewModel.inputNumbers.toDouble()
-            binding.textViewDisplay.text = calcViewModel.result.toString()
-        }
-
-
-
-        //resetting all values to default
-        calcViewModel.checkAdd = false
-        calcViewModel.checkMultiply = false
-        calcViewModel.checkDiv = false
-        calcViewModel.checkPercent = false
-
-
-    }
 
 
     override fun onResume() {//when orientation is turned, display still needs to be updated upon resuming (even tho Active objects are not destroyed)
@@ -424,3 +404,4 @@ class MainActivity : AppCompatActivity() {
 
 
 }
+
