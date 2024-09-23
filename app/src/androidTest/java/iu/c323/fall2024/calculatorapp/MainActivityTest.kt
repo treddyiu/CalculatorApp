@@ -124,7 +124,7 @@ class MainActivityTest {
   }
 
     @Test
-    fun checkOrientationSwitch(){
+    fun checkOrientationSwitch(){//test10 will check to make sure that the display maintains the same values despite simulating orientation change
         onView(withId(R.id.seven_button)).perform(click())
         onView(withId(R.id.x_button)).perform(click())
         onView(withId(R.id.three_button)).perform(click())
