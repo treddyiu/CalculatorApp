@@ -18,7 +18,7 @@ import org.junit.runner.RunWith
 import java.net.IDN
 
 @RunWith(AndroidJUnit4::class)
-class MainActivityTest {
+class MainActivityTest{
 
     private lateinit var scenario: ActivityScenario<MainActivity>
 
