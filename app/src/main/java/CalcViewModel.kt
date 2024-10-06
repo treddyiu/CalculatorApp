@@ -6,7 +6,6 @@ import kotlin.math.log
 import kotlin.math.sin
 import kotlin.math.tan
 
-//used to preserve orientation changes
 
 //make keys to pass in for set functions
 const val KEY_INPUT_NUMBERS = "inputNumbers"
